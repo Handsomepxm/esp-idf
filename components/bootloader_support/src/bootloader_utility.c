@@ -456,6 +456,7 @@ void bootloader_utility_load_boot_image(const bootloader_state_t *bs, int start_
     int index = start_index;
     esp_partition_pos_t part;
     esp_image_metadata_t image_data;
+	int try_count;
 
     if (start_index == TEST_APP_INDEX) {
         if (try_load_partition(&bs->test, &image_data)) {
@@ -468,18 +469,22 @@ void bootloader_utility_load_boot_image(const bootloader_state_t *bs, int start_
 
     /* work backwards from start_index, down to the factory app */
     for (index = start_index; index >= FACTORY_INDEX; index--) {
-        part = index_to_partition(bs, index);
-        if (part.size == 0) {
-            continue;
-        }
-        ESP_LOGD(TAG, TRY_LOG_FORMAT, index, part.offset, part.size);
-        if (check_anti_rollback(&part) && try_load_partition(&part, &image_data)) {
-            set_actual_ota_seq(bs, index);
-            load_image(&image_data);
-        }
-        log_invalid_app_partition(index);
+		for(try_count = 0; try_count<5; try_count++)//避免开机固件版本倒退//pxm
+		{
+			esp_rom_delay_us(5000);
+	        part = index_to_partition(bs, index);
+	        if (part.size == 0) {
+	            continue;
+	        }
+	        ESP_LOGD(TAG, TRY_LOG_FORMAT, index, part.offset, part.size);
+	        if (check_anti_rollback(&part) && try_load_partition(&part, &image_data)) {	
+				set_actual_ota_seq(bs, index);
+	            load_image(&image_data);
+	        }
+	        log_invalid_app_partition(index);
+		}
     }
-
+	
     /* failing that work forwards from start_index, try valid OTA slots */
     for (index = start_index + 1; index < bs->app_count; index++) {
         part = index_to_partition(bs, index);

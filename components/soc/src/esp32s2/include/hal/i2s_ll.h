@@ -91,6 +91,7 @@ static inline void i2s_ll_disable_rx_intr(i2s_dev_t *hw)
 static inline void i2s_ll_disable_tx_intr(i2s_dev_t *hw)
 {
     hw->int_ena.out_eof = 0;
+	hw->int_ena.out_total_eof = 0;
     hw->int_ena.out_dscr_err = 0;
 }
 
@@ -102,6 +103,7 @@ static inline void i2s_ll_disable_tx_intr(i2s_dev_t *hw)
 static inline void i2s_ll_enable_tx_intr(i2s_dev_t *hw)
 {
     hw->int_ena.out_eof = 1;
+	hw->int_ena.out_total_eof = 1;
     hw->int_ena.out_dscr_err = 1;
 }
 

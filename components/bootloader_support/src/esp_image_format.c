@@ -644,7 +644,7 @@ static esp_err_t verify_segment_header(int index, const esp_image_segment_header
     /* Check that flash cache mapped segment aligns correctly from flash to its mapped address,
        relative to the 64KB page mapping size.
     */
-    ESP_LOGV(TAG, "segment %d map_segment %d segment_data_offs 0x%x load_addr 0x%x",
+    ESP_LOGI(TAG, "segment %d map_segment %d segment_data_offs 0x%x load_addr 0x%x",
              index, map_segment, segment_data_offs, load_addr);
     if (map_segment
             && ((segment_data_offs % SPI_FLASH_MMU_PAGE_SIZE) != (load_addr % SPI_FLASH_MMU_PAGE_SIZE))) {

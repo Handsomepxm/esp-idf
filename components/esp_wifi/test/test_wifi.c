@@ -183,7 +183,7 @@ static void start_wifi_as_softap(void)
         .ap.authmode = WIFI_AUTH_WPA2_PSK,
         .ap.ssid_hidden = false,
         .ap.max_connection = 4,
-        .ap.beacon_interval = 100,
+        .ap.beacon_interval = 60000 ,
     };
 
     event_init();
