@@ -94,7 +94,7 @@ static void ota_example_task(void *pvParameter)
              running->type, running->subtype, running->address);
 
     esp_http_client_config_t config = {
-        .url = CONFIG_EXAMPLE_FIRMWARE_UPG_URL,
+        .url = "http://192.168.0.66:8000/hello-world.bin",//CONFIG_EXAMPLE_FIRMWARE_UPG_URL
         .cert_pem = (char *)server_cert_pem_start,
         .timeout_ms = CONFIG_EXAMPLE_OTA_RECV_TIMEOUT,
     };
@@ -164,6 +164,7 @@ static void ota_example_task(void *pvParameter)
                     }
 
                     // check current version with last invalid partition
+#if 0	
                     if (last_invalid_app != NULL) {
                         if (memcmp(invalid_app_info.version, new_app_info.version, sizeof(new_app_info.version)) == 0) {
                             ESP_LOGW(TAG, "New version is the same as invalid version.");
@@ -173,12 +174,14 @@ static void ota_example_task(void *pvParameter)
                             infinite_loop();
                         }
                     }
+					
 #ifndef CONFIG_EXAMPLE_SKIP_VERSION_CHECK
                     if (memcmp(new_app_info.version, running_app_info.version, sizeof(new_app_info.version)) == 0) {
                         ESP_LOGW(TAG, "Current running version is the same as a new. We will not continue the update.");
                         http_cleanup(client);
                         infinite_loop();
                     }
+#endif
 #endif
 
                     image_header_was_checked = true;

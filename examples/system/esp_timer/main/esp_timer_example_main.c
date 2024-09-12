@@ -14,6 +14,8 @@
 #include "esp_log.h"
 #include "esp_sleep.h"
 #include "sdkconfig.h"
+#include "esp_task_wdt.h"
+
 
 static void periodic_timer_callback(void* arg);
 static void oneshot_timer_callback(void* arg);

@@ -44,7 +44,7 @@
 #define LEDC_LS_TIMER          LEDC_TIMER_1
 #define LEDC_LS_MODE           LEDC_LOW_SPEED_MODE
 #ifdef CONFIG_IDF_TARGET_ESP32S2
-#define LEDC_LS_CH0_GPIO       (18)
+#define LEDC_LS_CH0_GPIO       (12)//(18)
 #define LEDC_LS_CH0_CHANNEL    LEDC_CHANNEL_0
 #define LEDC_LS_CH1_GPIO       (19)
 #define LEDC_LS_CH1_CHANNEL    LEDC_CHANNEL_1
@@ -157,6 +157,8 @@ void app_main(void)
     ledc_fade_func_install(0);
 
     while (1) {
+
+		#if 1
         printf("1. LEDC fade up to duty = %d\n", LEDC_TEST_DUTY);
         for (ch = 0; ch < LEDC_TEST_CH_NUM; ch++) {
             ledc_set_fade_with_time(ledc_channel[ch].speed_mode,
@@ -174,19 +176,29 @@ void app_main(void)
                     ledc_channel[ch].channel, LEDC_FADE_NO_WAIT);
         }
         vTaskDelay(LEDC_TEST_FADE_TIME / portTICK_PERIOD_MS);
-
+		#endif
+		#if 1	
         printf("3. LEDC set duty = %d without fade\n", LEDC_TEST_DUTY);
         for (ch = 0; ch < LEDC_TEST_CH_NUM; ch++) {
             ledc_set_duty(ledc_channel[ch].speed_mode, ledc_channel[ch].channel, LEDC_TEST_DUTY);
             ledc_update_duty(ledc_channel[ch].speed_mode, ledc_channel[ch].channel);
         }
         vTaskDelay(1000 / portTICK_PERIOD_MS);
+		#endif
 
+		#if 1
         printf("4. LEDC set duty = 0 without fade\n");
         for (ch = 0; ch < LEDC_TEST_CH_NUM; ch++) {
             ledc_set_duty(ledc_channel[ch].speed_mode, ledc_channel[ch].channel, 0);
             ledc_update_duty(ledc_channel[ch].speed_mode, ledc_channel[ch].channel);
         }
-        vTaskDelay(1000 / portTICK_PERIOD_MS);
+        vTaskDelay(5000 / portTICK_PERIOD_MS);
+			
+		printf("stop PWM output\n");
+		for (ch = 0; ch < LEDC_TEST_CH_NUM; ch++) {
+			ledc_stop(ledc_channel[ch].speed_mode, ledc_channel[ch].channel, 1);
+		}
+		vTaskDelay(5000 / portTICK_PERIOD_MS);	
+		#endif
     }
 }

@@ -28,7 +28,8 @@ static const char *TAG = "example";
 static const rmt_item32_t morse_esp[] = {
     // E : dot
     {{{ 32767, 1, 32767, 0 }}}, // dot
-    {{{ 32767, 0, 32767, 0 }}}, // SPACE
+    //{{{ 32767, 0, 32767, 0 }}}, // SPACE
+    #if 0
     // S : dot, dot, dot
     {{{ 32767, 1, 32767, 0 }}}, // dot
     {{{ 32767, 1, 32767, 0 }}}, // dot
@@ -43,6 +44,7 @@ static const rmt_item32_t morse_esp[] = {
     {{{ 32767, 1, 32767, 0 }}}, // dot
     // RMT end marker
     {{{ 0, 1, 0, 0 }}}
+	#endif
 };
 
 /*
@@ -74,7 +76,7 @@ void app_main(void *ignore)
 
     while (1) {
         ESP_ERROR_CHECK(rmt_write_items(RMT_TX_CHANNEL, morse_esp, sizeof(morse_esp) / sizeof(morse_esp[0]), true));
-        ESP_LOGI(TAG, "Transmission complete");
-        vTaskDelay(1000 / portTICK_PERIOD_MS);
+        //ESP_LOGI(TAG, "Transmission complete");
+        vTaskDelay(100 / portTICK_PERIOD_MS);
     }
 }

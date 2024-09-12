@@ -19,6 +19,7 @@
 #include "esp_vfs.h"
 #include "esp_vfs_fat.h"
 #include "esp_system.h"
+#include "hal\spi_types.h"
 
 static const char *TAG = "example";
 
@@ -33,6 +34,7 @@ static const esp_partition_t* example_add_partition(esp_flash_t* ext_flash, cons
 static void example_list_data_partitions(void);
 static bool example_mount_fatfs(const char* partition_label);
 static void example_get_fatfs_usage(size_t* out_total_bytes, size_t* out_free_bytes);
+
 
 void app_main(void)
 {

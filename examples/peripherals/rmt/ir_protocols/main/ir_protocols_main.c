@@ -61,7 +61,7 @@ static void example_ir_rx_task(void *arg)
             //after parsing the data, return spaces to ringbuffer.
             vRingbufferReturnItem(rb, (void *) items);
         } else {
-            break;
+            //break;
         }
     }
     ir_parser->del(ir_parser);
@@ -115,5 +115,5 @@ static void example_ir_tx_task(void *arg)
 void app_main(void)
 {
     xTaskCreate(example_ir_rx_task, "ir_rx_task", 2048, NULL, 10, NULL);
-    xTaskCreate(example_ir_tx_task, "ir_tx_task", 2048, NULL, 10, NULL);
+    //xTaskCreate(example_ir_tx_task, "ir_tx_task", 2048, NULL, 10, NULL);
 }

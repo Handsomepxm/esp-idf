@@ -131,6 +131,8 @@ static void tcp_server_task(void *pvParameters)
 
         shutdown(sock, 0);
         close(sock);
+
+		ESP_LOGI(TAG, "return to accept ");
     }
 
 CLEAN_UP:

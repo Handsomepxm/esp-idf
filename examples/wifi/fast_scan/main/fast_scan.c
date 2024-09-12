@@ -106,7 +106,7 @@ static void fast_scan(void)
             .scan_method = DEFAULT_SCAN_METHOD,
             .sort_method = DEFAULT_SORT_METHOD,
             .threshold.rssi = DEFAULT_RSSI,
-            .threshold.authmode = DEFAULT_AUTHMODE,
+            .threshold.authmode = WIFI_AUTH_WPA2_PSK,
         },
     };
     ESP_ERROR_CHECK(esp_wifi_set_mode(WIFI_MODE_STA));

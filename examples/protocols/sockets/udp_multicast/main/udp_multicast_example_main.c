@@ -142,8 +142,8 @@ static int create_multicast_ipv4_socket(void)
     // select whether multicast traffic should be received by this device, too
     // (if setsockopt() is not called, the default is no)
     uint8_t loopback_val = MULTICAST_LOOPBACK;
-    err = setsockopt(sock, IPPROTO_IP, IP_MULTICAST_LOOP,
-                     &loopback_val, sizeof(uint8_t));
+    err = setsockopt(sock, IPPROTO_IP, IP_MULTICAST_LOOP, &loopback_val, sizeof(uint8_t));
+                     
     if (err < 0) {
         ESP_LOGE(V4TAG, "Failed to set IP_MULTICAST_LOOP. Error %d", errno);
         goto err;

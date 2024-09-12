@@ -13,6 +13,8 @@
 #include "freertos/task.h"
 #include "freertos/queue.h"
 #include "driver/gpio.h"
+#include "soc/gpio_struct.h"
+#include "nvs_flash.h"
 
 /**
  * Brief:
@@ -40,6 +42,7 @@
 #define ESP_INTR_FLAG_DEFAULT 0
 
 static xQueueHandle gpio_evt_queue = NULL;
+static gpio_dev_t *gpio_reg_pt = (&GPIO);
 
 static void IRAM_ATTR gpio_isr_handler(void* arg)
 {
@@ -65,7 +68,8 @@ void app_main(void)
     //set as output mode
     io_conf.mode = GPIO_MODE_OUTPUT;
     //bit mask of the pins that you want to set,e.g.GPIO18/19
-    io_conf.pin_bit_mask = GPIO_OUTPUT_PIN_SEL;
+    io_conf.pin_bit_mask = ((uint64_t)0X1FF<<33);//GPIO_OUTPUT_PIN_SEL
+    //io_conf.pin_bit_mask = ((uint64_t)0XFF000);//GPIO_OUTPUT_PIN_SEL
     //disable pull-down mode
     io_conf.pull_down_en = 0;
     //disable pull-up mode
@@ -103,14 +107,73 @@ void app_main(void)
     //hook isr handler for specific gpio pin again
     gpio_isr_handler_add(GPIO_INPUT_IO_0, gpio_isr_handler, (void*) GPIO_INPUT_IO_0);
 
+	nvs_flash_init();
+	
     printf("Minimum free heap size: %d bytes\n", esp_get_minimum_free_heap_size());
 
-    int cnt = 0;
+    //int cnt = 0;
     while(1) {
-        printf("cnt: %d\n", cnt++);
-        vTaskDelay(1000 / portTICK_RATE_MS);
-        gpio_set_level(GPIO_OUTPUT_IO_0, cnt % 2);
-        gpio_set_level(GPIO_OUTPUT_IO_1, cnt % 2);
+        //printf("cnt: %d\n", cnt++);
+        //vTaskDelay(1000 / portTICK_RATE_MS);
+        //gpio_set_level(GPIO_OUTPUT_IO_0, cnt % 2);
+        /*
+        gpio_set_level(GPIO_OUTPUT_IO_1, 0);
+		gpio_set_level(GPIO_OUTPUT_IO_1, 1);
+		gpio_set_level(GPIO_OUTPUT_IO_1, 0);
+		gpio_set_level(GPIO_OUTPUT_IO_1, 1);
+		gpio_set_level(GPIO_OUTPUT_IO_1, 0);
+		gpio_set_level(GPIO_OUTPUT_IO_1, 1);
+		gpio_set_level(GPIO_OUTPUT_IO_1, 0);
+		gpio_set_level(GPIO_OUTPUT_IO_1, 1);
+		gpio_set_level(GPIO_OUTPUT_IO_1, 0);
+		gpio_set_level(GPIO_OUTPUT_IO_1, 1);
+		gpio_set_level(GPIO_OUTPUT_IO_1, 0);
+		gpio_set_level(GPIO_OUTPUT_IO_1, 1);
+		*/
+		
+		gpio_reg_pt->out1.data = 0X3FF;
+		gpio_reg_pt->out1.data = 0; 
+		gpio_reg_pt->out1.data = 0X3FF; 
+		gpio_reg_pt->out1.data = 0; 
+		gpio_reg_pt->out1.data = 0X3FF; 
+		gpio_reg_pt->out1.data = 0; 
+		gpio_reg_pt->out1.data = 0X3FF; 
+		gpio_reg_pt->out1.data = 0; 
+		gpio_reg_pt->out1.data = 0X3FF; 
+		gpio_reg_pt->out1.data = 0; 
+		gpio_reg_pt->out1.data = 0X3FF; 
+		gpio_reg_pt->out1.data = 0; 
+		
+		/*
+		gpio_reg_pt->out_w1ts = 0XFF000;
+		gpio_reg_pt->out_w1tc = 0XFF000;
+		gpio_reg_pt->out_w1ts = 0XFF000;
+		gpio_reg_pt->out_w1tc = 0XFF000;
+		gpio_reg_pt->out_w1ts = 0XFF000;
+		gpio_reg_pt->out_w1tc = 0XFF000;
+		gpio_reg_pt->out_w1ts = 0XFF000;
+		gpio_reg_pt->out_w1tc = 0XFF000;
+		gpio_reg_pt->out_w1ts = 0XFF000;
+		gpio_reg_pt->out_w1tc = 0XFF000;
+		gpio_reg_pt->out_w1ts = 0XFF000;
+		gpio_reg_pt->out_w1tc = 0XFF000;
+		*/
+		/*
+		gpio_reg_pt->out |= 0XFF000; 
+		gpio_reg_pt->out &= ~0XFF000; 
+		gpio_reg_pt->out |= 0XFF000; 
+		gpio_reg_pt->out &= ~0XFF000; 
+		gpio_reg_pt->out |= 0XFF000; 
+		gpio_reg_pt->out &= ~0XFF000; 
+		gpio_reg_pt->out |= 0XFF000; 
+		gpio_reg_pt->out &= ~0XFF000; 
+		gpio_reg_pt->out |= 0XFF000; 
+		gpio_reg_pt->out &= ~0XFF000; 
+		gpio_reg_pt->out |= 0XFF000; 
+		gpio_reg_pt->out &= ~0XFF000; 
+		gpio_reg_pt->out |= 0XFF000; 
+		gpio_reg_pt->out &= ~0XFF000; 
+		*/
     }
 }
 
